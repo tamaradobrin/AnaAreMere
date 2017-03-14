@@ -5,11 +5,11 @@ public class App {
 	public static double a, b;
 
 	public static void main(String[] args) {
-		a = -5.12;
-		b = 5.12;
+		a = -2.048;
+		b = 2.048;
 		int m = 5;
-		int function = 1;
-		HillClimbing.computeBestImprovement(m, a, b, function);
+		int function = 3;
+		HillClimbing.compute(m, a, b, function, true);
 	}
 
 	static void printBinarySolution(int m, int[] sol, int numberOfBits) {

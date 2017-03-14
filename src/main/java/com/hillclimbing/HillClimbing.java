@@ -5,6 +5,26 @@ import java.util.List;
 
 public class HillClimbing {
 
+	static int[] computeFirstImprovement(double a, double b, int m, int numberOfBits, int function, int[] sol) {
+		int n = m * numberOfBits;
+		double[] nextSolD = BinaryUtils.getSolution(a, b, m, sol, numberOfBits);
+		double bestVal = Functions.computeFunction(nextSolD, m, function);
+		int[] neighbour = Arrays.copyOf(sol, n);
+		double[] neighbourD = new double[m];
+		for (int i = 0; i < n + n / 2; i++) {
+			int pos = (int) (Math.random() * n);
+			neighbour[pos] = sol[pos] == 0 ? 1 : 0;
+			neighbourD = BinaryUtils.getSolution(a, b, m, neighbour, numberOfBits);
+			double newVal = Functions.computeFunction(neighbourD, m, function);
+			if (newVal < bestVal) {
+				bestVal = newVal;
+				return neighbour;
+			}
+		}
+		return neighbour;
+
+	}
+
 	static int[] computeBestImprovement(double a, double b, int m, int numberOfBits, int function, int[] sol) {
 		int n = m * numberOfBits;
 		int[] nextSol = Arrays.copyOf(sol, n);
@@ -23,7 +43,7 @@ public class HillClimbing {
 		return nextSol;
 	}
 
-	static void computeBestImprovement(int m, double a, double b, int function) {
+	static void compute(int m, double a, double b, int function, boolean firstImprovement) {
 		int numberOfBits = BinaryUtils.getNumberOfBits(a, b);
 		int n = m * numberOfBits;
 		int[] oldSol = BinaryUtils.generateRandomSolution(m, numberOfBits);
@@ -31,9 +51,14 @@ public class HillClimbing {
 		do {
 			App.printBinarySolution(m, nextSol, numberOfBits);
 			App.printFPSolution(m, BinaryUtils.getSolution(a, b, m, nextSol, numberOfBits));
-			System.out.println(Functions.computeFunction(BinaryUtils.getSolution(a, b, m, nextSol, numberOfBits), m, function));
+			System.out.println("\n"
+					+ Functions.computeFunction(BinaryUtils.getSolution(a, b, m, nextSol, numberOfBits), m, function)
+					+ "\n");
 			oldSol = Arrays.copyOf(nextSol, n);
-			nextSol = computeBestImprovement(a, b, m, numberOfBits, function, oldSol);
+			if (firstImprovement)
+				nextSol = computeFirstImprovement(a, b, m, numberOfBits, function, oldSol);
+			else
+				nextSol = computeBestImprovement(a, b, m, numberOfBits, function, oldSol);
 		} while (checkCandidate(oldSol, nextSol, a, b, m, numberOfBits, function));
 	}
 
