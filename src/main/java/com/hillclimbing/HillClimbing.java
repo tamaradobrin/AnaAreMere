@@ -5,6 +5,9 @@ import java.util.List;
 
 public class HillClimbing {
 
+	static int iteration;
+	static int changeIteration;
+
 	static int[] computeFirstImprovement(double a, double b, int m, int numberOfBits, int function, int[] sol) {
 		int n = m * numberOfBits;
 		double[] nextSolD = BinaryUtils.getSolution(a, b, m, sol, numberOfBits);
@@ -12,11 +15,13 @@ public class HillClimbing {
 		int[] neighbour = Arrays.copyOf(sol, n);
 		double[] neighbourD = new double[m];
 		for (int i = 0; i < n + n / 2; i++) {
+			iteration++;
 			int pos = (int) (Math.random() * n);
 			neighbour[pos] = sol[pos] == 0 ? 1 : 0;
 			neighbourD = BinaryUtils.getSolution(a, b, m, neighbour, numberOfBits);
 			double newVal = Functions.computeFunction(neighbourD, m, function);
 			if (newVal < bestVal) {
+				changeIteration = iteration;
 				bestVal = newVal;
 				return neighbour;
 			}
@@ -33,9 +38,11 @@ public class HillClimbing {
 		List<int[]> neighboursI = BinaryUtils.getAllNeighbours(sol, n);
 		double[] neighbourD = new double[m];
 		for (int[] neighbour : neighboursI) {
+			iteration++;
 			neighbourD = BinaryUtils.getSolution(a, b, m, neighbour, numberOfBits);
 			double newVal = Functions.computeFunction(neighbourD, m, function);
 			if (newVal < bestVal) {
+				changeIteration = iteration;
 				bestVal = newVal;
 				nextSol = Arrays.copyOf(neighbour, n);
 			}
@@ -49,11 +56,10 @@ public class HillClimbing {
 		int[] oldSol = BinaryUtils.generateRandomSolution(m, numberOfBits);
 		int[] nextSol = Arrays.copyOf(oldSol, n);
 		do {
-			App.printBinarySolution(m, nextSol, numberOfBits);
-			App.printFPSolution(m, BinaryUtils.getSolution(a, b, m, nextSol, numberOfBits));
-			System.out.println("\n"
-					+ Functions.computeFunction(BinaryUtils.getSolution(a, b, m, nextSol, numberOfBits), m, function)
-					+ "\n");
+			
+			double[] solD = BinaryUtils.getSolution(a, b, m, nextSol, numberOfBits);
+			double val = Functions.computeFunction(solD, m, function);
+			printSolution(m, numberOfBits, nextSol, solD, val);
 			oldSol = Arrays.copyOf(nextSol, n);
 			if (firstImprovement)
 				nextSol = computeFirstImprovement(a, b, m, numberOfBits, function, oldSol);
@@ -67,5 +73,13 @@ public class HillClimbing {
 		double[] solD = BinaryUtils.getSolution(a, b, m, sol, numberOfBits);
 		double[] candidateD = BinaryUtils.getSolution(a, b, m, candidate, numberOfBits);
 		return Functions.computeFunction(solD, m, function) > Functions.computeFunction(candidateD, m, function);
+	}
+	
+	static void printSolution(int m, int numberOfBits, int[] sol, double[] solD, double val){
+		App.printBinarySolution(m, sol, numberOfBits);
+		App.printFPSolution(m, solD);
+		System.out.println("\nIteration: " + changeIteration + ", value: "
+				+ val
+				+ "\n");
 	}
 }
