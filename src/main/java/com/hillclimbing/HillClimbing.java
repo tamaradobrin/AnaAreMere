@@ -1,6 +1,9 @@
 package com.hillclimbing;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
@@ -57,7 +60,7 @@ public class HillClimbing {
 	}
 
 	void compute(int m, double a, double b, int function, boolean firstImprovement) {
-		createFile(function);
+		String fileName = createFile(function);
 		int numberOfBits = BinaryUtils.getNumberOfBits(a, b);
 		int n = m * numberOfBits;
 		int[] oldSol = BinaryUtils.generateRandomSolution(m, numberOfBits);
@@ -66,6 +69,7 @@ public class HillClimbing {
 			double[] solD = BinaryUtils.getSolution(a, b, m, nextSol, numberOfBits);
 			double val = Functions.computeFunction(solD, m, function);
 			printSolution(m, numberOfBits, nextSol, solD, val);
+			updateFile(fileName, changeIteration + " " + val);
 			oldSol = Arrays.copyOf(nextSol, n);
 			if (firstImprovement)
 				nextSol = computeFirstImprovement(a, b, m, numberOfBits, function, oldSol);
@@ -84,7 +88,7 @@ public class HillClimbing {
 	static void printSolution(int m, int numberOfBits, int[] sol, double[] solD, double val) {
 		App.printBinarySolution(m, sol, numberOfBits);
 		App.printFPSolution(m, solD);
-		System.out.println("\nIteration: " + changeIteration + ", value: " + val + "\n");
+		System.out.println("\nIteration: " + changeIteration + " value: " + val + "\n");
 	}
 
 	String createFile(int function) {
@@ -115,9 +119,22 @@ public class HillClimbing {
 		}
 		return fileName;
 	}
-	
-	void updateFile(String fileName, String text){
-		URL url = getClass().getProtectionDomain().getCodeSource().getLocation();
-		File file = new File(url.getPath() + fileName);
+
+	void updateFile(String fileName, String text) {
+		try {
+			URL url = getClass().getProtectionDomain().getCodeSource().getLocation();
+			File file = new File(url.getPath() + fileName);
+			FileWriter writer = new FileWriter(file.getPath(), true);
+			BufferedWriter bw = new BufferedWriter(writer);
+			bw.write(text);
+			bw.newLine();
+			bw.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
