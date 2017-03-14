@@ -1,5 +1,11 @@
 package com.hillclimbing;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.URL;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 
@@ -50,13 +56,13 @@ public class HillClimbing {
 		return nextSol;
 	}
 
-	static void compute(int m, double a, double b, int function, boolean firstImprovement) {
+	void compute(int m, double a, double b, int function, boolean firstImprovement) {
+		createFile(function);
 		int numberOfBits = BinaryUtils.getNumberOfBits(a, b);
 		int n = m * numberOfBits;
 		int[] oldSol = BinaryUtils.generateRandomSolution(m, numberOfBits);
 		int[] nextSol = Arrays.copyOf(oldSol, n);
 		do {
-			
 			double[] solD = BinaryUtils.getSolution(a, b, m, nextSol, numberOfBits);
 			double val = Functions.computeFunction(solD, m, function);
 			printSolution(m, numberOfBits, nextSol, solD, val);
@@ -74,12 +80,44 @@ public class HillClimbing {
 		double[] candidateD = BinaryUtils.getSolution(a, b, m, candidate, numberOfBits);
 		return Functions.computeFunction(solD, m, function) > Functions.computeFunction(candidateD, m, function);
 	}
-	
-	static void printSolution(int m, int numberOfBits, int[] sol, double[] solD, double val){
+
+	static void printSolution(int m, int numberOfBits, int[] sol, double[] solD, double val) {
 		App.printBinarySolution(m, sol, numberOfBits);
 		App.printFPSolution(m, solD);
-		System.out.println("\nIteration: " + changeIteration + ", value: "
-				+ val
-				+ "\n");
+		System.out.println("\nIteration: " + changeIteration + ", value: " + val + "\n");
+	}
+
+	String createFile(int function) {
+		String fileName = "";
+		switch (function) {
+		case 1:
+			fileName = "Rastrigin";
+			break;
+		case 2:
+			fileName = "Griewangk";
+			break;
+		case 3:
+			fileName = "Rosenbrock";
+			break;
+		case 4:
+			fileName = "Camel";
+			break;
+		}
+		String timestamp = new SimpleDateFormat("yyyyMMddHHmmss").format(System.currentTimeMillis());
+		fileName = fileName + timestamp + ".txt";
+		try {
+			URL url = getClass().getProtectionDomain().getCodeSource().getLocation();
+			File file = new File(url.getPath() + fileName);
+			file.getParentFile().mkdirs();
+			file.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return fileName;
+	}
+	
+	void updateFile(String fileName, String text){
+		URL url = getClass().getProtectionDomain().getCodeSource().getLocation();
+		File file = new File(url.getPath() + fileName);
 	}
 }

@@ -9,7 +9,8 @@ public class App {
 		b = 2.048;
 		int m = 5;
 		int function = 3;
-		HillClimbing.compute(m, a, b, function, false);
+		HillClimbing hillClimbing = new HillClimbing();
+		hillClimbing.compute(m, a, b, function, false);
 	}
 
 	static void printBinarySolution(int m, int[] sol, int numberOfBits) {
