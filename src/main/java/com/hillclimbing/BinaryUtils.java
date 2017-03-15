@@ -17,8 +17,7 @@ public class BinaryUtils {
 		return log(x, 2);
 	}
 
-	static int[] generateRandomSolution(int m, int numberOfBits) {
-		int length = numberOfBits * m;
+	static int[] generateRandomSolution(int length) {
 		int[] solution = new int[length];
 		for (int i = 0; i < length; i++) {
 			solution[i] = Math.random() > 0.5 ? 0 : 1;
@@ -33,6 +32,17 @@ public class BinaryUtils {
 			int valInt = getDouble(v);
 			sol[i] = ((double) valInt / (Math.pow(2, numberOfBits) - 1)) * (b - a) + a;
 		}
+		return sol;
+	}
+
+	static double[] getSolutionCamel(double a1, double b1, double a2, double b2, int m, int[] binary, int n1, int n2) {
+		double[] sol = new double[m];
+		int[] v1 = Arrays.copyOfRange(binary, 0, n1);
+		int valInt1 = getDouble(v1);
+		sol[0] = ((double) valInt1 / (Math.pow(2, n1) - 1)) * (b1 - a1) + a1;
+		int[] v2 = Arrays.copyOfRange(binary, n1, n1 + n2);
+		int valInt2 = getDouble(v2);
+		sol[1] = ((double) valInt2 / (Math.pow(2, n2) - 1)) * (b2 - a2) + a2;
 		return sol;
 	}
 
