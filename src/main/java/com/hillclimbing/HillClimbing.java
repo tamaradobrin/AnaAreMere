@@ -12,6 +12,10 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 
+import com.utils.BinaryUtils;
+import com.utils.FileUtils;
+import com.utils.Functions;
+
 public class HillClimbing {
 
 	static int iteration;
@@ -104,8 +108,10 @@ public class HillClimbing {
 	}
 
 	void compute(int m, double a, double b, int function, boolean firstImprovement) {
-		iteration = 0;changeIteration=0;
-		String fileName = createFile(function);
+		iteration = 0;
+		changeIteration = 0;
+		FileUtils fileUtils = new FileUtils();
+		String fileName = fileUtils.createFile(function);
 		int numberOfBits = BinaryUtils.getNumberOfBits(a, b);
 		int n = m * numberOfBits;
 		int[] oldSol = BinaryUtils.generateRandomSolution(n);
@@ -114,7 +120,7 @@ public class HillClimbing {
 			double[] solD = BinaryUtils.getSolution(a, b, m, nextSol, numberOfBits);
 			double val = Functions.computeFunction(solD, m, function);
 			printSolution(m, numberOfBits, nextSol, solD, val);
-			updateFile(fileName, changeIteration + " " + val);
+			fileUtils.updateFile(fileName, changeIteration + " " + val);
 			oldSol = Arrays.copyOf(nextSol, n);
 			if (firstImprovement)
 				nextSol = computeFirstImprovement(a, b, m, numberOfBits, function, oldSol);
@@ -124,8 +130,10 @@ public class HillClimbing {
 	}
 
 	void computeCamel(int m, double a1, double b1, double a2, double b2, int function, boolean firstImprovement) {
-		iteration = 0;changeIteration=0;
-		String fileName = createFile(function);
+		iteration = 0;
+		changeIteration = 0;
+		FileUtils fileUtils = new FileUtils();
+		String fileName = fileUtils.createFile(function);
 		int numberOfBits1 = BinaryUtils.getNumberOfBits(a1, b1);
 		int numberOfBits2 = BinaryUtils.getNumberOfBits(a2, b2);
 		int n = numberOfBits1 + numberOfBits2;
@@ -135,7 +143,7 @@ public class HillClimbing {
 			double[] solD = BinaryUtils.getSolutionCamel(a1, b1, a2, b2, m, nextSol, numberOfBits1, numberOfBits2);
 			double val = Functions.computeFunction(solD, m, function);
 			// printSolution(m, numberOfBits, nextSol, solD, val);
-			updateFile(fileName, changeIteration + " " + val);
+			fileUtils.updateFile(fileName, changeIteration + " " + val);
 			oldSol = Arrays.copyOf(nextSol, n);
 			if (firstImprovement)
 				nextSol = computeFirstImprovementCamel(a1, b1, a2, b2, m, numberOfBits1, numberOfBits2, function,
@@ -164,52 +172,5 @@ public class HillClimbing {
 		App.printBinarySolution(m, sol, numberOfBits);
 		App.printFPSolution(m, solD);
 		System.out.println("\nIteration: " + changeIteration + " value: " + val + "\n");
-	}
-
-	String createFile(int function) {
-		String fileName = "";
-		switch (function) {
-		case 1:
-			fileName = "Rastrigin";
-			break;
-		case 2:
-			fileName = "Griewangk";
-			break;
-		case 3:
-			fileName = "Rosenbrock";
-			break;
-		case 4:
-			fileName = "Camel";
-			break;
-		}
-		String timestamp = new SimpleDateFormat("yyyyMMddHHmmss").format(System.currentTimeMillis());
-		fileName = fileName + timestamp + ".txt";
-		try {
-			URL url = getClass().getProtectionDomain().getCodeSource().getLocation();
-			File file = new File(url.getPath() + fileName);
-			file.getParentFile().mkdirs();
-			file.createNewFile();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return fileName;
-	}
-
-	void updateFile(String fileName, String text) {
-		try {
-			URL url = getClass().getProtectionDomain().getCodeSource().getLocation();
-			File file = new File(url.getPath() + fileName);
-			FileWriter writer = new FileWriter(file.getPath(), true);
-			BufferedWriter bw = new BufferedWriter(writer);
-			bw.write(text);
-			bw.newLine();
-			bw.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 }

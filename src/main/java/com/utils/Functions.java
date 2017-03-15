@@ -1,4 +1,4 @@
-package com.hillclimbing;
+package com.utils;
 
 public class Functions {
 	public static double rastrigin(double[] x, int n) {
