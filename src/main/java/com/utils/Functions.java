@@ -45,4 +45,8 @@ public class Functions {
 			return 0;
 		}
 	}
+
+	public static double computeFitnessFunction(double[] x, int n, int function) {
+		return 1 / (computeFunction(x, n, function) + 1e-4);
+	}
 }

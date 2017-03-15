@@ -65,4 +65,12 @@ public class BinaryUtils {
 		}
 		return neighbours;
 	}
+	
+	public static List<int[]> generatePopulation(int populationSize, int length){
+		List<int[]> population = new ArrayList<int[]>();
+		for(int i=0;i<populationSize;i++){
+			population.add(generateRandomSolution(length));
+		}
+		return population;
+	}
 }
