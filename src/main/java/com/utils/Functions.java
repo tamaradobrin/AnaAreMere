@@ -1,4 +1,4 @@
-package com.hillclimbing;
+package com.utils;
 
 public class Functions {
 	public static double rastrigin(double[] x, int n) {
@@ -44,5 +44,9 @@ public class Functions {
 		default:
 			return 0;
 		}
+	}
+
+	public static double computeFitnessFunction(double[] x, int n, int function) {
+		return 1 / (computeFunction(x, n, function) + 1e-4);
 	}
 }

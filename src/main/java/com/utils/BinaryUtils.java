@@ -1,4 +1,4 @@
-package com.hillclimbing;
+package com.utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,16 +8,16 @@ public class BinaryUtils {
 	public static final int q = 2;
 	public static int numberOfBits;
 
-	static int log(double x, int base) {
+	public static int log(double x, int base) {
 		return (int) (Math.log(x) / Math.log(base) + 1e-10);
 	}
 
-	static int getNumberOfBits(double a, double b) {
+	public static int getNumberOfBits(double a, double b) {
 		double x = Math.pow(10, q) * (b - a);
 		return log(x, 2);
 	}
 
-	static int[] generateRandomSolution(int length) {
+	public static int[] generateRandomSolution(int length) {
 		int[] solution = new int[length];
 		for (int i = 0; i < length; i++) {
 			solution[i] = Math.random() > 0.5 ? 0 : 1;
@@ -25,7 +25,7 @@ public class BinaryUtils {
 		return solution;
 	}
 
-	static double[] getSolution(double a, double b, int m, int[] binary, int numberOfBits) {
+	public static double[] getSolution(double a, double b, int m, int[] binary, int numberOfBits) {
 		double[] sol = new double[m];
 		for (int i = 0; i < m; i++) {
 			int[] v = Arrays.copyOfRange(binary, i * numberOfBits, (i + 1) * numberOfBits);
@@ -35,7 +35,7 @@ public class BinaryUtils {
 		return sol;
 	}
 
-	static double[] getSolutionCamel(double a1, double b1, double a2, double b2, int m, int[] binary, int n1, int n2) {
+	public static double[] getSolutionCamel(double a1, double b1, double a2, double b2, int m, int[] binary, int n1, int n2) {
 		double[] sol = new double[m];
 		int[] v1 = Arrays.copyOfRange(binary, 0, n1);
 		int valInt1 = getDouble(v1);
@@ -46,7 +46,7 @@ public class BinaryUtils {
 		return sol;
 	}
 
-	static int getDouble(int[] binary) {
+	public static int getDouble(int[] binary) {
 		int result = 0;
 		int pow = 1;
 		for (int i = 0; i < binary.length; i++) {
@@ -56,7 +56,7 @@ public class BinaryUtils {
 		return result;
 	}
 
-	static List<int[]> getAllNeighbours(int[] solution, int n) {
+	public static List<int[]> getAllNeighbours(int[] solution, int n) {
 		List<int[]> neighbours = new ArrayList<int[]>();
 		for (int i = 0; i < n; i++) {
 			int[] neighbour = Arrays.copyOf(solution, solution.length);
@@ -64,5 +64,13 @@ public class BinaryUtils {
 			neighbours.add(neighbour);
 		}
 		return neighbours;
+	}
+	
+	public static List<int[]> generatePopulation(int populationSize, int length){
+		List<int[]> population = new ArrayList<int[]>();
+		for(int i=0;i<populationSize;i++){
+			population.add(generateRandomSolution(length));
+		}
+		return population;
 	}
 }

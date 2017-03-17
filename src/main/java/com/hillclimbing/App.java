@@ -4,8 +4,6 @@ import java.util.concurrent.TimeUnit;
 
 public class App {
 
-	public static double a, b;
-
 	public static void main(String[] args) {
 		int m = 5, numberOfIterations = 2;
 		HillClimbing hillClimbing = new HillClimbing();
