@@ -35,7 +35,8 @@ public class BinaryUtils {
 		return sol;
 	}
 
-	public static double[] getSolutionCamel(double a1, double b1, double a2, double b2, int m, int[] binary, int n1, int n2) {
+	public static double[] getSolutionCamel(double a1, double b1, double a2, double b2, int m, int[] binary, int n1,
+			int n2) {
 		double[] sol = new double[m];
 		int[] v1 = Arrays.copyOfRange(binary, 0, n1);
 		int valInt1 = getDouble(v1);
@@ -65,11 +66,11 @@ public class BinaryUtils {
 		}
 		return neighbours;
 	}
-	
-	public static List<int[]> generatePopulation(int populationSize, int length){
-		List<int[]> population = new ArrayList<int[]>();
-		for(int i=0;i<populationSize;i++){
-			population.add(generateRandomSolution(length));
+
+	public static int[][] generatePopulation(int populationSize, int length, int m) {
+		int[][] population = new int[populationSize][m * length];
+		for (int i = 0; i < populationSize; i++) {
+			population[i] = generateRandomSolution(m * length);
 		}
 		return population;
 	}

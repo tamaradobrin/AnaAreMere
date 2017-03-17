@@ -38,6 +38,22 @@ public class FileUtils {
 		return fileName;
 	}
 
+	public String createFile(Function function) {
+		if (function instanceof Rastrigin) {
+			return createFile(1);
+		}
+		if (function instanceof Griewangk) {
+			return createFile(2);
+		}
+		if (function instanceof Rosenbrock) {
+			return createFile(3);
+		}
+		if (function instanceof Camel) {
+			return createFile(4);
+		}
+		return "";
+	}
+
 	public void updateFile(String fileName, String text) {
 		try {
 			URL url = getClass().getProtectionDomain().getCodeSource().getLocation();

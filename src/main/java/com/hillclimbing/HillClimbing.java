@@ -14,7 +14,7 @@ import java.util.List;
 
 import com.utils.BinaryUtils;
 import com.utils.FileUtils;
-import com.utils.Functions;
+import com.utils.Function;
 
 public class HillClimbing {
 
@@ -24,7 +24,7 @@ public class HillClimbing {
 	static int[] computeFirstImprovement(double a, double b, int m, int numberOfBits, int function, int[] sol) {
 		int n = m * numberOfBits;
 		double[] nextSolD = BinaryUtils.getSolution(a, b, m, sol, numberOfBits);
-		double bestVal = Functions.computeFunction(nextSolD, m, function);
+		double bestVal = Function.computeFunction(nextSolD, m, function);
 		int[] neighbour = Arrays.copyOf(sol, n);
 		double[] neighbourD = new double[m];
 		for (int i = 0; i < n + n / 2; i++) {
@@ -32,7 +32,7 @@ public class HillClimbing {
 			int pos = (int) (Math.random() * n);
 			neighbour[pos] = sol[pos] == 0 ? 1 : 0;
 			neighbourD = BinaryUtils.getSolution(a, b, m, neighbour, numberOfBits);
-			double newVal = Functions.computeFunction(neighbourD, m, function);
+			double newVal = Function.computeFunction(neighbourD, m, function);
 			if (newVal < bestVal) {
 				changeIteration = iteration;
 				bestVal = newVal;
@@ -47,7 +47,7 @@ public class HillClimbing {
 			int numberOfBits2, int function, int[] sol) {
 		int n = numberOfBits1 + numberOfBits2;
 		double[] nextSolD = BinaryUtils.getSolutionCamel(a1, b1, a2, b2, m, sol, numberOfBits1, numberOfBits2);
-		double bestVal = Functions.computeFunction(nextSolD, m, function);
+		double bestVal = Function.computeFunction(nextSolD, m, function);
 		int[] neighbour = Arrays.copyOf(sol, n);
 		double[] neighbourD = new double[m];
 		for (int i = 0; i < n + n / 2; i++) {
@@ -55,7 +55,7 @@ public class HillClimbing {
 			int pos = (int) (Math.random() * n);
 			neighbour[pos] = sol[pos] == 0 ? 1 : 0;
 			neighbourD = BinaryUtils.getSolutionCamel(a1, b1, a2, b2, m, neighbour, numberOfBits1, numberOfBits2);
-			double newVal = Functions.computeFunction(neighbourD, m, function);
+			double newVal = Function.computeFunction(neighbourD, m, function);
 			if (newVal < bestVal) {
 				changeIteration = iteration;
 				bestVal = newVal;
@@ -70,13 +70,13 @@ public class HillClimbing {
 		int n = m * numberOfBits;
 		int[] nextSol = Arrays.copyOf(sol, n);
 		double[] nextSolD = BinaryUtils.getSolution(a, b, m, sol, numberOfBits);
-		double bestVal = Functions.computeFunction(nextSolD, m, function);
+		double bestVal = Function.computeFunction(nextSolD, m, function);
 		List<int[]> neighboursI = BinaryUtils.getAllNeighbours(sol, n);
 		double[] neighbourD = new double[m];
 		for (int[] neighbour : neighboursI) {
 			iteration++;
 			neighbourD = BinaryUtils.getSolution(a, b, m, neighbour, numberOfBits);
-			double newVal = Functions.computeFunction(neighbourD, m, function);
+			double newVal = Function.computeFunction(neighbourD, m, function);
 			if (newVal < bestVal) {
 				changeIteration = iteration;
 				bestVal = newVal;
@@ -91,13 +91,13 @@ public class HillClimbing {
 		int n = numberOfBits1 + numberOfBits2;
 		int[] nextSol = Arrays.copyOf(sol, n);
 		double[] nextSolD = BinaryUtils.getSolutionCamel(a1, b1, a2, b2, m, sol, numberOfBits1, numberOfBits2);
-		double bestVal = Functions.computeFunction(nextSolD, m, function);
+		double bestVal = Function.computeFunction(nextSolD, m, function);
 		List<int[]> neighboursI = BinaryUtils.getAllNeighbours(sol, n);
 		double[] neighbourD = new double[m];
 		for (int[] neighbour : neighboursI) {
 			iteration++;
 			neighbourD = BinaryUtils.getSolutionCamel(a1, b1, a2, b2, m, neighbour, numberOfBits1, numberOfBits2);
-			double newVal = Functions.computeFunction(neighbourD, m, function);
+			double newVal = Function.computeFunction(neighbourD, m, function);
 			if (newVal < bestVal) {
 				changeIteration = iteration;
 				bestVal = newVal;
@@ -118,7 +118,7 @@ public class HillClimbing {
 		int[] nextSol = Arrays.copyOf(oldSol, n);
 		do {
 			double[] solD = BinaryUtils.getSolution(a, b, m, nextSol, numberOfBits);
-			double val = Functions.computeFunction(solD, m, function);
+			double val = Function.computeFunction(solD, m, function);
 			printSolution(m, numberOfBits, nextSol, solD, val);
 			fileUtils.updateFile(fileName, changeIteration + " " + val);
 			oldSol = Arrays.copyOf(nextSol, n);
@@ -141,7 +141,7 @@ public class HillClimbing {
 		int[] nextSol = Arrays.copyOf(oldSol, n);
 		do {
 			double[] solD = BinaryUtils.getSolutionCamel(a1, b1, a2, b2, m, nextSol, numberOfBits1, numberOfBits2);
-			double val = Functions.computeFunction(solD, m, function);
+			double val = Function.computeFunction(solD, m, function);
 			// printSolution(m, numberOfBits, nextSol, solD, val);
 			fileUtils.updateFile(fileName, changeIteration + " " + val);
 			oldSol = Arrays.copyOf(nextSol, n);
@@ -158,14 +158,14 @@ public class HillClimbing {
 			int function) {
 		double[] solD = BinaryUtils.getSolution(a, b, m, sol, numberOfBits);
 		double[] candidateD = BinaryUtils.getSolution(a, b, m, candidate, numberOfBits);
-		return Functions.computeFunction(solD, m, function) > Functions.computeFunction(candidateD, m, function);
+		return Function.computeFunction(solD, m, function) > Function.computeFunction(candidateD, m, function);
 	}
 
 	static boolean checkCandidateCamel(int[] sol, int[] candidate, double a1, double b1, double a2, double b2, int m,
 			int numberOfBits1, int numberOfBits2, int function) {
 		double[] solD = BinaryUtils.getSolutionCamel(a1, b1, a2, b2, m, sol, numberOfBits1, numberOfBits2);
 		double[] candidateD = BinaryUtils.getSolutionCamel(a1, b1, a2, b2, m, candidate, numberOfBits1, numberOfBits2);
-		return Functions.computeFunction(solD, m, function) > Functions.computeFunction(candidateD, m, function);
+		return Function.computeFunction(solD, m, function) > Function.computeFunction(candidateD, m, function);
 	}
 
 	static void printSolution(int m, int numberOfBits, int[] sol, double[] solD, double val) {

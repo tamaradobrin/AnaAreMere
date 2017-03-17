@@ -1,6 +1,11 @@
 package com.utils;
 
-public class Functions {
+public abstract class Function {
+	
+	public static final double EPSILON = 0.0001;
+	public int numberOfBits;
+	public int m;
+	
 	public static double rastrigin(double[] x, int n) {
 		double sum = 10 * n;
 		for (int i = 0; i < n; i++) {
@@ -45,8 +50,10 @@ public class Functions {
 			return 0;
 		}
 	}
-
-	public static double computeFitnessFunction(double[] x, int n, int function) {
-		return 1 / (computeFunction(x, n, function) + 1e-4);
+	
+	public abstract double compute(int[] sol);
+	
+	public double computeFitness(int[] sol){
+		return 1 / (compute(sol) + EPSILON);
 	}
 }
