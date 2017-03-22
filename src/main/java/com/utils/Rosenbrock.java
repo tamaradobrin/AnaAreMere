@@ -13,11 +13,19 @@ public class Rosenbrock extends Function {
 	@Override
 	public double compute(int[] sol) {
 		double sum = 0;
-		double[] x = BinaryUtils.getSolution(a, b, m, sol, sol.length);
+		double[] x = BinaryUtils.getSolution(a, b, m, sol, numberOfBits);
 		for (int i = 0; i < m - 1; i++) {
 			sum += 100 * Math.pow(x[i + 1] - x[i] * x[i], 2) + Math.pow(1 - x[i], 2);
 		}
 		return sum;
+	}
+	
+	public double getA() {
+		return a;
+	}
+
+	public double getB() {
+		return b;
 	}
 
 }

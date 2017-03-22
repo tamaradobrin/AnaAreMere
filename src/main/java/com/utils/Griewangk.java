@@ -13,12 +13,20 @@ public class Griewangk extends Function{
 	@Override
 	public double compute(int[] sol) {
 		double sum = 0, prod = 1;
-		double[] x = BinaryUtils.getSolution(a, b, m, sol, sol.length);
+		double[] x = BinaryUtils.getSolution(a, b, m, sol, numberOfBits);
 		for (int i = 0; i < m; i++) {
 			sum += (x[i] * x[i]) / 4000;
 			prod *= Math.cos(x[i] / Math.sqrt(i + 1));
 		}
 		return sum - prod + 1;
+	}
+	
+	public double getA() {
+		return a;
+	}
+
+	public double getB() {
+		return b;
 	}
 
 }

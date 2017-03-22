@@ -20,6 +20,10 @@ public class Genetic {
 	private double crossoverRate;
 	private int[] bestIndividual;
 	private double bestFitness;
+	
+	public Genetic(){
+		super();
+	}
 
 	public Genetic(int populationSize, double mutationRate, double crossoverRate, Function function) {
 		this.populationSize = populationSize;
@@ -33,7 +37,7 @@ public class Genetic {
 		}
 	}
 
-	private void generateInitialPopulation() {
+	public void generateInitialPopulation() {
 		population = BinaryUtils.generatePopulation(populationSize, function.numberOfBits, function.m);
 	}
 
@@ -54,7 +58,7 @@ public class Genetic {
 		System.out.println("End of execution");
 	}
 
-	private double[] computeFitnessValues(int[][] population) {
+	public double[] computeFitnessValues(int[][] population) {
 		double[] res = new double[populationSize];
 		for (int i = 0; i < populationSize; i++) {
 			res[i] = function.computeFitness(population[i]);
@@ -62,22 +66,23 @@ public class Genetic {
 		return res;
 	}
 
-	private int[][] rouletteWheel(int[][] population) {
+	public int[][] rouletteWheel(int[][] population) {
 		int[][] res = new int[populationSize][length];
 		fitnessValues = computeFitnessValues(population);
 		double[] prob = new double[populationSize];
-		double[] cummulateProb = new double[populationSize];
+		double[] cummulateProb = new double[populationSize + 1];
 		double totalFitness = 0;
 		for (int i = 0; i < populationSize; i++) {
 			totalFitness += fitnessValues[i];
 		}
-		cummulateProb[0] = 0;
 		for (int i = 0; i < populationSize; i++) {
 			prob[i] = fitnessValues[i] / totalFitness;
-			if (i > 0) {
-				cummulateProb[i] = cummulateProb[i - 1] + prob[i];
-			}
 		}
+		cummulateProb[0] = 0;
+		for (int i = 1; i < populationSize; i++) {
+			cummulateProb[i] = cummulateProb[i - 1] + prob[i - 1];
+		}
+		cummulateProb[populationSize] = 1;
 		double r;
 		Random random = new Random();
 		for (int i = 0; i < populationSize; i++) {
@@ -94,7 +99,7 @@ public class Genetic {
 		return res;
 	}
 
-	private int[][] mutation(int[][] population, double mutationRate) {
+	public int[][] mutation(int[][] population, double mutationRate) {
 		int[][] res = new int[populationSize][length];
 		Random random = new Random();
 		for (int i = 0; i < populationSize; i++) {
@@ -109,7 +114,7 @@ public class Genetic {
 		return res;
 	}
 
-	private int[][] crossover(int[][] population, double crossoverRate) {
+	public int[][] crossover(int[][] population, double crossoverRate) {
 		int[][] res = new int[populationSize][length];
 		Random random = new Random();
 		List<Integer> selectedPositions = new ArrayList<Integer>();
@@ -134,7 +139,7 @@ public class Genetic {
 		return res;
 	}
 
-	private int[] crossover(int[] parent1, int[] parent2) {
+	public int[] crossover(int[] parent1, int[] parent2) {
 		int[] child = new int[length];
 		Random random = new Random();
 		int pos = random.nextInt(length);
@@ -148,7 +153,7 @@ public class Genetic {
 		return child;
 	}
 
-	private int[] getBestIndividual(int[][] population, double[] fitnessValues) {
+	public int[] getBestIndividual(int[][] population, double[] fitnessValues) {
 		int[] res = new int[length];
 		double max = getBestFitness(fitnessValues);
 		for (int i = 0; i < populationSize; i++) {
@@ -160,7 +165,7 @@ public class Genetic {
 		return res;
 	}
 
-	private double getBestFitness(double[] fitnessValues) {
+	public double getBestFitness(double[] fitnessValues) {
 		double max = fitnessValues[0];
 		for (int i = 1; i < fitnessValues.length; i++) {
 			if (fitnessValues[i] > max) {
@@ -170,7 +175,7 @@ public class Genetic {
 		return max;
 	}
 
-	private void computeAndPrintBest(int[][] population, String fileName, int count) {
+	public void computeAndPrintBest(int[][] population, String fileName, int count) {
 		FileUtils fileUtils = new FileUtils();
 		fitnessValues = computeFitnessValues(population);
 		bestFitness = getBestFitness(fitnessValues);
