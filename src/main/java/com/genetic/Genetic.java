@@ -43,7 +43,6 @@ public class Genetic {
 	}
 
 	public void executeAlgorithm() {
-		System.out.println("Started execution");
 		generateInitialPopulation();
 		int count = 0;
 		FileUtils fileUtils = new FileUtils();
@@ -56,7 +55,8 @@ public class Genetic {
 			count++;
 			computeAndPrintBest(population, fileName, count);
 		} while (count < NUMBER_OF_GENERATIONS);
-		System.out.println("End of execution");
+		double bestFunctionValue = function.compute(bestIndividual);
+		System.out.println(bestFunctionValue);
 	}
 
 	public double[] computeFitnessValues(int[][] population) {

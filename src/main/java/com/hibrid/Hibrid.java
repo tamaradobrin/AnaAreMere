@@ -37,7 +37,6 @@ public class Hibrid {
 	}
 
 	public void executeAlgorithm() {
-		System.out.println("Started execution");
 		Genetic genetic = new Genetic(populationSize, mutationRate, crossoverRate, function);
 		population = genetic.generateInitialPopulation();
 		int count = 0;
@@ -52,7 +51,9 @@ public class Hibrid {
 			count++;
 			genetic.computeAndPrintBest(population, fileName, count);
 		} while (count < NUMBER_OF_GENERATIONS);
-		System.out.println("End of execution");
+		bestIndividual = genetic.getBestIndividual(population, genetic.computeFitnessValues(population));
+		double bestFunctionValue = function.compute(bestIndividual);
+		System.out.println(bestFunctionValue);
 	}
 
 	public int[][] hillClimbing(int[][] population, double hillclimbingRate) {

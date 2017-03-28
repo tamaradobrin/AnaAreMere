@@ -114,7 +114,6 @@ public class HillClimbing {
 		do {
 			double[] solD = BinaryUtils.getSolution(a, b, m, nextSol, numberOfBits);
 			double val = Function.computeFunction(solD, m, function);
-			printSolution(m, numberOfBits, nextSol, solD, val);
 			fileUtils.updateFile(fileName, changeIteration + " " + val);
 			oldSol = Arrays.copyOf(nextSol, n);
 			if (firstImprovement)
@@ -122,6 +121,9 @@ public class HillClimbing {
 			else
 				nextSol = computeBestImprovement(a, b, m, numberOfBits, function, oldSol);
 		} while (checkCandidate(oldSol, nextSol, a, b, m, numberOfBits, function));
+		double[] solD = BinaryUtils.getSolution(a, b, m, nextSol, numberOfBits);
+		double val = Function.computeFunction(solD, m, function);
+		System.out.println(val);
 		return nextSol;
 	}
 
@@ -195,7 +197,6 @@ public class HillClimbing {
 		do {
 			double[] solD = BinaryUtils.getSolutionCamel(a1, b1, a2, b2, m, nextSol, numberOfBits1, numberOfBits2);
 			double val = Function.computeFunction(solD, m, function);
-			// printSolution(m, numberOfBits, nextSol, solD, val);
 			fileUtils.updateFile(fileName, changeIteration + " " + val);
 			oldSol = Arrays.copyOf(nextSol, n);
 			if (firstImprovement)
@@ -205,6 +206,9 @@ public class HillClimbing {
 				nextSol = computeBestImprovementCamel(a1, b1, a2, b2, m, numberOfBits1, numberOfBits2, function,
 						oldSol);
 		} while (checkCandidateCamel(oldSol, nextSol, a1, b1, a2, b2, m, numberOfBits1, numberOfBits2, function));
+		double[] solD = BinaryUtils.getSolutionCamel(a1, b1, a2, b2, m, nextSol, numberOfBits1, numberOfBits2);
+		double val = Function.computeFunction(solD, m, function);
+		System.out.println(val);
 	}
 
 	static boolean checkCandidate(int[] sol, int[] candidate, double a, double b, int m, int numberOfBits,
@@ -224,6 +228,5 @@ public class HillClimbing {
 	static void printSolution(int m, int numberOfBits, int[] sol, double[] solD, double val) {
 		App.printBinarySolution(m, sol, numberOfBits);
 		App.printFPSolution(m, solD);
-		System.out.println("\nIteration: " + changeIteration + " value: " + val + "\n");
 	}
 }
