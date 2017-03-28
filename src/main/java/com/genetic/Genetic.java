@@ -37,8 +37,9 @@ public class Genetic {
 		}
 	}
 
-	public void generateInitialPopulation() {
+	public int[][] generateInitialPopulation() {
 		population = BinaryUtils.generatePopulation(populationSize, function.numberOfBits, function.m);
+		return population;
 	}
 
 	public void executeAlgorithm() {

@@ -23,4 +23,20 @@ public class Camel extends Function {
 				+ (-4 + 4 * Math.pow(x[1], 2)) * Math.pow(x[1], 2);
 	}
 
+	public double getA1() {
+		return a1;
+	}
+
+	public double getB1() {
+		return b1;
+	}
+
+	public double getA2() {
+		return a2;
+	}
+
+	public double getB2() {
+		return b2;
+	}
+
 }

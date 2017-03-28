@@ -1,18 +1,10 @@
 package com.hillclimbing;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.URL;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 
 import com.utils.BinaryUtils;
+import com.utils.Camel;
 import com.utils.FileUtils;
 import com.utils.Function;
 import com.utils.Griewangk;
@@ -136,23 +128,39 @@ public class HillClimbing {
 	public int[] computeExp(int m, double a, double b, int function, boolean firstImprovement, int[] sol) {
 		iteration = 0;
 		changeIteration = 0;
-		FileUtils fileUtils = new FileUtils();
-		String fileName = fileUtils.createFile(function);
 		int numberOfBits = BinaryUtils.getNumberOfBits(a, b);
 		int n = m * numberOfBits;
 		int[] oldSol = Arrays.copyOf(sol, n);
 		int[] nextSol = Arrays.copyOf(sol, n);
 		do {
 			double[] solD = BinaryUtils.getSolution(a, b, m, nextSol, numberOfBits);
-			double val = Function.computeFunction(solD, m, function);
-			printSolution(m, numberOfBits, nextSol, solD, val);
-			fileUtils.updateFile(fileName, changeIteration + " " + val);
 			oldSol = Arrays.copyOf(nextSol, n);
 			if (firstImprovement)
 				nextSol = computeFirstImprovement(a, b, m, numberOfBits, function, oldSol);
 			else
 				nextSol = computeBestImprovement(a, b, m, numberOfBits, function, oldSol);
 		} while (checkCandidate(oldSol, nextSol, a, b, m, numberOfBits, function));
+		return nextSol;
+	}
+	
+	public int[] computeExpCamel(int m, double a1, double b1, double a2, double b2, int function, boolean firstImprovement, int[] sol) {
+		iteration = 0;
+		changeIteration = 0;
+		int numberOfBits1 = BinaryUtils.getNumberOfBits(a1, b1);
+		int numberOfBits2 = BinaryUtils.getNumberOfBits(a2, b2);
+		int n = numberOfBits1 + numberOfBits2;
+		int[] oldSol = Arrays.copyOf(sol, n);
+		int[] nextSol = Arrays.copyOf(sol, n);
+		do {
+			double[] solD = BinaryUtils.getSolutionCamel(a1, b1, a2, b2, m, nextSol, numberOfBits1, numberOfBits2);
+			oldSol = Arrays.copyOf(nextSol, n);
+			if (firstImprovement)
+				nextSol = computeFirstImprovementCamel(a1, b1, a2, b2, m, numberOfBits1, numberOfBits2, function,
+						oldSol);
+			else
+				nextSol = computeBestImprovementCamel(a1, b1, a2, b2, m, numberOfBits1, numberOfBits2, function,
+						oldSol);
+		} while (checkCandidateCamel(oldSol, nextSol, a1, b1, a2, b2, m, numberOfBits1, numberOfBits2, function));
 		return nextSol;
 	}
 
@@ -162,10 +170,13 @@ public class HillClimbing {
 			return computeExp(m, f.getA(), f.getB(), 1, firstImprovement, sol);
 		} else if (function instanceof Rosenbrock) {
 			Rosenbrock f = (Rosenbrock) function;
-			return computeExp(m, f.getA(), f.getB(), 1, firstImprovement, sol);
+			return computeExp(m, f.getA(), f.getB(), 3, firstImprovement, sol);
 		} else if (function instanceof Griewangk) {
 			Griewangk f = (Griewangk) function;
-			return computeExp(m, f.getA(), f.getB(), 1, firstImprovement, sol);
+			return computeExp(m, f.getA(), f.getB(), 2, firstImprovement, sol);
+		} else if(function instanceof Camel){
+			Camel f = (Camel) function;
+			return computeExpCamel(m, f.getA1(), f.getB1(), f.getA2(), f.getB2(), 4, firstImprovement, sol);
 		}
 		return null;
 

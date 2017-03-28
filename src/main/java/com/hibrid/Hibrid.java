@@ -10,7 +10,7 @@ import com.utils.FileUtils;
 import com.utils.Function;
 
 public class Hibrid {
-	private static final int NUMBER_OF_GENERATIONS = 100;
+	private static final int NUMBER_OF_GENERATIONS = 200;
 	private Function function;
 	private int populationSize;
 	private int length;
@@ -38,8 +38,8 @@ public class Hibrid {
 
 	public void executeAlgorithm() {
 		System.out.println("Started execution");
-		Genetic genetic = new Genetic();
-		genetic.generateInitialPopulation();
+		Genetic genetic = new Genetic(populationSize, mutationRate, crossoverRate, function);
+		population = genetic.generateInitialPopulation();
 		int count = 0;
 		FileUtils fileUtils = new FileUtils();
 		String fileName = fileUtils.createFile(function);
@@ -48,11 +48,7 @@ public class Hibrid {
 			population = genetic.rouletteWheel(population);
 			population = genetic.mutation(population, mutationRate);
 			population = genetic.crossover(population, crossoverRate);
-			if (function instanceof Camel) {
-
-			} else {
-				population = hillClimbing(population, hillclimbingRate);
-			}
+			population = hillClimbing(population, hillclimbingRate);
 			count++;
 			genetic.computeAndPrintBest(population, fileName, count);
 		} while (count < NUMBER_OF_GENERATIONS);
