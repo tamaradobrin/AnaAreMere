@@ -10,7 +10,7 @@ import com.utils.Rosenbrock;
 public class App {
 
 	public static void main(String[] args) {
-		int m = 30, numberOfIterations = 30;
+		int m = 5, numberOfIterations = 30;
 		double mutationRate = 0.1;
 		double crossoverRate = 0.4;
 		double hillClimbingRate = 0.3;
