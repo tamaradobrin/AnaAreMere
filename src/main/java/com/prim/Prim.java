@@ -12,7 +12,7 @@ public class Prim {
 		p.exec(true);
 		p.exec(false);
 		for (int i = 0; i < 31; i++) {
-			System.out.println("f(" + i + ") = " + p.f(i));
+			//System.out.println("f(" + i + ") = " + p.f(i));
 		}
 	}
 
@@ -53,11 +53,10 @@ public class Prim {
 		int n = 5;
 		int nextSolD = BinaryUtils.getDouble(sol);
 		double bestVal = f(nextSolD);
-		int[] neighbour = Arrays.copyOf(sol, n);
 		int neighbourD = 0;
-		for (int i = 0; i < n + n / 2; i++) {
-			int pos = (int) (Math.random() * n);
-			neighbour[pos] = sol[pos] == 0 ? 1 : 0;
+		for (int i = n - 1; i >= 0; i--) {
+			int[] neighbour = Arrays.copyOf(sol, n);
+			neighbour[i] = neighbour[i] == 0 ? 1 : 0;
 			neighbourD = BinaryUtils.getDouble(neighbour);
 			double newVal = f(neighbourD);
 			if (newVal > bestVal) {

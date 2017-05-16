@@ -1,11 +1,12 @@
 package com.utils;
 
 public abstract class Function {
-	
+
 	public static final double EPSILON = 0.0001;
 	public int numberOfBits;
 	public int m;
-	
+	public double A, B;
+
 	public static double rastrigin(double[] x, int n) {
 		double sum = 10 * n;
 		for (int i = 0; i < n; i++) {
@@ -50,10 +51,29 @@ public abstract class Function {
 			return 0;
 		}
 	}
-	
+
 	public abstract double compute(int[] sol);
+
+	public abstract double compute(double[] sol);
+
+	public double getDouble(double r) {
+		double result = A + r * (B - A);
+		if (result < A)
+			return A;
+		if (result > B)
+			return B;
+		return result;
+	}
 	
-	public double computeFitness(int[] sol){
+	public double getDoubleInRange(double r){
+		if (r < A)
+			return A;
+		if (r > B)
+			return B;
+		return r;
+	}
+
+	public double computeFitness(int[] sol) {
 		return 1 / (compute(sol) + EPSILON);
 	}
 }

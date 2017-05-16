@@ -8,6 +8,8 @@ public class Rosenbrock extends Function {
 	public Rosenbrock(int m) {
 		this.m = m;
 		this.numberOfBits = BinaryUtils.getNumberOfBits(a, b);
+		this.A = a;
+		this.B = b;
 	}
 
 	@Override
@@ -19,7 +21,16 @@ public class Rosenbrock extends Function {
 		}
 		return sum;
 	}
-	
+
+	@Override
+	public double compute(double[] x) {
+		double sum = 0;
+		for (int i = 0; i < m - 1; i++) {
+			sum += 100 * Math.pow(x[i + 1] - x[i] * x[i], 2) + Math.pow(1 - x[i], 2);
+		}
+		return sum;
+	}
+
 	public double getA() {
 		return a;
 	}

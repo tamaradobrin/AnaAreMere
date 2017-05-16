@@ -23,6 +23,12 @@ public class Camel extends Function {
 				+ (-4 + 4 * Math.pow(x[1], 2)) * Math.pow(x[1], 2);
 	}
 
+	@Override
+	public double compute(double[] x) {
+		return (4 - 2.1 * Math.pow(x[0], 2) + Math.pow(x[0], 4) / 3) * Math.pow(x[0], 2) + x[0] * x[1]
+				+ (-4 + 4 * Math.pow(x[1], 2)) * Math.pow(x[1], 2);
+	}
+
 	public double getA1() {
 		return a1;
 	}
