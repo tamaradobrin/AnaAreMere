@@ -16,18 +16,18 @@ public class FileUtils {
   private static final String FILENAME1 = ROOT_DIRECTORY + INSTANCE_FILES[0];
   private static final String FILENAME2 = ROOT_DIRECTORY + INSTANCE_FILES[1];
 
-  public MTSPInstance readInstance(String fileName) {
+  public MTSPInstance readInstance(int pos) {
     int dimension = 0;
     int[][] node_coord;
     List<String> coordLines = new ArrayList<String>();
     BufferedReader br = null;
     FileReader fr = null;
-    File f = new File(fileName);
+    File f = new File(ROOT_DIRECTORY + INSTANCE_FILES[pos]);
     try {
       fr = new FileReader(f);
       br = new BufferedReader(fr);
       String sCurrentLine;
-      br = new BufferedReader(new FileReader(fileName));
+      br = new BufferedReader(new FileReader(ROOT_DIRECTORY + INSTANCE_FILES[pos]));
       int startLine = -1, index = 0;
       while ((sCurrentLine = br.readLine()) != null) {
         if (sCurrentLine.contains("DIMENSION")) {
@@ -67,11 +67,11 @@ public class FileUtils {
   }
 
   public static void main(String[] args) {
-    MTSPInstance instance = new FileUtils().readInstance(FILENAME1);
-    System.out.println("Dimension: " + instance.getDimension());
+    MTSPInstance instance = new FileUtils().readInstance(1);
+    System.out.println("Dimension: " + instance.getN());
     System.out.println("Coordinates: ");
     int[][] coordinates = instance.getCoordinates();
-    for (int i = 0; i < instance.getDimension(); i++) {
+    for (int i = 0; i < instance.getN(); i++) {
       System.out.println(coordinates[i][0] + " " + coordinates[i][1]);
     }
   }
