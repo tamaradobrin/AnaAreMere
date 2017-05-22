@@ -113,6 +113,23 @@ public class Population {
       q2 = p2;
       p2 = aux;
     }
+    int[] childChromosome = Arrays.copyOf(parentChromosome, parentChromosome.length);
+    if ((q1 - p1) != (q2 - p2)) {
+      childChromosome[instance.getN() - 1 + t1] =
+          childChromosome[instance.getN() - 1 + t1] + (q2 - p2) - (q1 - p1);
+      childChromosome[instance.getN() - 1 + t2] =
+          childChromosome[instance.getN() - 1 + t2] + (q1 - p1) - (q2 - p2);
+    }
+    int i = 0;
+    while (i < instance.getN() - 1) {
+      if (i >= p1 && i <= q1) {
+        for (int j = 0; j < q2 - p2; j++) {
+          childChromosome[i] = parentChromosome[p2 + j];
+          i++;
+        }
+      }
+      i++;
+    }
     return child;
   }
 
