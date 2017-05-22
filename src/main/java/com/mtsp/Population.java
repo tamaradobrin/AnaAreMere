@@ -88,10 +88,31 @@ public class Population {
     return child;
   }
 
-  public Solution crossover(Solution parent1, Solution parent2) {
+  public Solution crossover(Solution parent) {
     Solution child = new Solution();
     child.setInstance(instance);
-
+    int[] parentChromosome = parent.getChromosome();
+    Random r = new Random();
+    int t1 = r.nextInt(instance.getM());
+    int t2 = r.nextInt(instance.getM());
+    while (t1 == t2) {
+      t2 = r.nextInt(instance.getM());
+    }
+    int p1 = r.nextInt(parentChromosome[instance.getN() + instance.getM() - 1 + t1]);
+    int q1 = r.nextInt(parentChromosome[instance.getN() + instance.getM() - 1 + t1]);
+    int p2 = r.nextInt(parentChromosome[instance.getN() + instance.getM() - 1 + t2]);
+    int q2 = r.nextInt(parentChromosome[instance.getN() + instance.getM() - 1 + t2]);
+    int aux;
+    if (q1 > p1) {
+      aux = q1;
+      q1 = p1;
+      p1 = aux;
+    }
+    if (q2 > p2) {
+      aux = q2;
+      q2 = p2;
+      p2 = aux;
+    }
     return child;
   }
 
