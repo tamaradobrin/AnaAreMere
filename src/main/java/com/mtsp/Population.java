@@ -92,23 +92,29 @@ public class Population {
     Solution child = new Solution();
     child.setInstance(instance);
     int[] parentChromosome = parent.getChromosome();
+    int[] tourStarts = parent.getTourStartPositions();
     Random r = new Random();
     int t1 = r.nextInt(instance.getM());
     int t2 = r.nextInt(instance.getM());
     while (t1 == t2) {
       t2 = r.nextInt(instance.getM());
     }
-    int p1 = r.nextInt(parentChromosome[instance.getN() + instance.getM() - 1 + t1]);
-    int q1 = r.nextInt(parentChromosome[instance.getN() + instance.getM() - 1 + t1]);
-    int p2 = r.nextInt(parentChromosome[instance.getN() + instance.getM() - 1 + t2]);
-    int q2 = r.nextInt(parentChromosome[instance.getN() + instance.getM() - 1 + t2]);
     int aux;
-    if (q1 > p1) {
+    if (t2 < t1) {
+      aux = t1;
+      t1 = t2;
+      t2 = aux;
+    }
+    int p1 = r.nextInt(parentChromosome[instance.getN() - 1 + t1]);
+    int q1 = r.nextInt(parentChromosome[instance.getN() - 1 + t1]);
+    int p2 = r.nextInt(parentChromosome[instance.getN() - 1 + t2]);
+    int q2 = r.nextInt(parentChromosome[instance.getN() - 1 + t2]);
+    if (q1 < p1) {
       aux = q1;
       q1 = p1;
       p1 = aux;
     }
-    if (q2 > p2) {
+    if (q2 < p2) {
       aux = q2;
       q2 = p2;
       p2 = aux;
@@ -120,16 +126,34 @@ public class Population {
       childChromosome[instance.getN() - 1 + t2] =
           childChromosome[instance.getN() - 1 + t2] + (q1 - p1) - (q2 - p2);
     }
-    int i = 0;
-    while (i < instance.getN() - 1) {
-      if (i >= p1 && i <= q1) {
-        for (int j = 0; j < q2 - p2; j++) {
-          childChromosome[i] = parentChromosome[p2 + j];
+    int i = 0, k = 0;
+    while (i < instance.getN() - 1 && k < instance.getN() - 1) {
+      if (i < tourStarts[t1] + p1) {
+        i++;
+        k++;
+      } else if (k >= tourStarts[t1] + p1 && k <= tourStarts[t1] + q1) {
+        for (int j = p2; j <= q2; j++) {
+          childChromosome[i] = parentChromosome[tourStarts[t2] + j];
           i++;
         }
+        k = tourStarts[t1] + q1 + 1;
+      } else if (k > tourStarts[t1] + q1 && k < tourStarts[t2] + p2) {
+        childChromosome[i] = parentChromosome[k];
+        i++;
+        k++;
+      } else if (k >= tourStarts[t2] + p2 && k <= tourStarts[t2] + q2) {
+        for (int j = p1; j <= q1; j++) {
+          childChromosome[i] = parentChromosome[tourStarts[t1] + j];
+          i++;
+        }
+        k = tourStarts[t2] + q2 + 1;
+      } else {
+        childChromosome[i] = parentChromosome[k];
+        i++;
+        k++;
       }
-      i++;
     }
+    child.setChromosome(childChromosome);
     return child;
   }
 
