@@ -6,8 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 public class Population {
-
-  private static final int NUMBER_OF_GENERATIONS = 100;
+  public static final double EPSILON = 0.0001;
 
   private List<Solution> population;
   private int populationSize;
@@ -26,6 +25,13 @@ public class Population {
   }
 
   public void setPopulation(List<Solution> population) {
+    List<Solution> newPop = new ArrayList<Solution>();
+    for (Solution s : population) {
+      Solution newS = new Solution();
+      newS.setInstance(s.getInstance());
+      int[] chromosome = Arrays.copyOf(s.getChromosome(), s.getChromosome().length);
+      newS.setChromosome(chromosome);
+    }
     this.population = population;
   }
 
@@ -45,6 +51,28 @@ public class Population {
       s.generateSolution();
       population.add(s);
     }
+  }
+
+  public void operate(double m1Rate, double m2Rate, double cRate) {
+    List<Solution> p = new ArrayList<Solution>();
+    Random random = new Random();;
+    for (int i = 0; i < populationSize; i++) {
+      Solution s = population.get(i);
+      double r = random.nextDouble();
+      if (r < m1Rate) {
+        s = mutation1(s);
+      }
+      r = random.nextDouble();
+      if (r < m2Rate) {
+        s = mutation2(s);
+      }
+      r = random.nextDouble();
+      if (r < cRate) {
+        s = crossover(s);
+      }
+      p.add(s);
+    }
+    setPopulation(p);
   }
 
   public Solution mutation1(Solution parent) {
@@ -157,4 +185,46 @@ public class Population {
     return child;
   }
 
+  public void rouletteWheel() {
+    List<Solution> p = new ArrayList<Solution>();
+    double[] fitnessValues = computeFitnessValues(population);
+    double[] prob = new double[populationSize];
+    double[] cummulateProb = new double[populationSize + 1];
+    double totalFitness = 0;
+    for (int i = 0; i < populationSize; i++) {
+      totalFitness += fitnessValues[i];
+    }
+    for (int i = 0; i < populationSize; i++) {
+      prob[i] = fitnessValues[i] / totalFitness;
+    }
+    cummulateProb[0] = 0;
+    for (int i = 1; i < populationSize; i++) {
+      cummulateProb[i] = cummulateProb[i - 1] + prob[i - 1];
+    }
+    cummulateProb[populationSize] = 1;
+    double r;
+    Random random = new Random();
+    for (int i = 0; i < populationSize; i++) {
+      p.add(new Solution());
+      r = random.nextDouble();
+      for (int j = 0; j < populationSize - 1; j++) {
+        if (cummulateProb[j] < r && r < cummulateProb[j + 1]) {
+          p.set(i, population.get(j));
+        }
+      }
+      if (r > cummulateProb[populationSize - 1]) {
+        p.set(i, population.get(populationSize - 1));
+      }
+    }
+    setPopulation(p);
+  }
+
+  public double[] computeFitnessValues(List<Solution> population) {
+    double[] fitnessValues = new double[populationSize];
+    int i = 0;
+    for (Solution s : population) {
+      fitnessValues[i++] = 1 / (s.computeLongestTour() + EPSILON);
+    }
+    return fitnessValues;
+  }
 }
