@@ -11,6 +11,24 @@ public class Population {
   private List<Solution> population;
   private int populationSize;
   private MTSPInstance instance;
+  private double bestTour;
+  private Solution bestSolution;
+
+  public double getBestTour() {
+    return bestTour;
+  }
+
+  public void setBestTour(double bestTour) {
+    this.bestTour = bestTour;
+  }
+
+  public Solution getBestSolution() {
+    return bestSolution;
+  }
+
+  public void setBestSolution(Solution bestSolution) {
+    this.bestSolution = bestSolution;
+  }
 
   public MTSPInstance getInstance() {
     return instance;

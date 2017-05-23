@@ -5,10 +5,10 @@ import java.util.List;
 public class MTSPInstance {
 
   public final static double M1_RATE = 0.2;
-  public final static double M2_RATE = 0.3;
-  public final static double C_RATE = 0.1;
-  public final static int ITERATIONS = 100;
-  public final static int POPULATION_SIZE = 50;
+  public final static double M2_RATE = 0.1;
+  public final static double C_RATE = 0.3;
+  public final static int ITERATIONS = 700;
+  public final static int POPULATION_SIZE = 100;
 
   private int n;
   private int[][] coordinates;
@@ -86,10 +86,12 @@ public class MTSPInstance {
     for (int i = 0; i < sol.length; i++) {
       System.out.print(sol[i] + " ");
     }
+    population.setBestTour(best);
+    population.setBestSolution(bestS);
   }
 
   public static void main(String[] args){
-      MTSPInstance instance = new MTSPInstance(0, 3);
+      MTSPInstance instance = new MTSPInstance(1, 7);
       instance.executeAlgorithm(instance);
   }
 }
