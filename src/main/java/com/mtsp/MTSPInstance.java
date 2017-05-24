@@ -7,8 +7,8 @@ public class MTSPInstance {
   public final static double M1_RATE = 0.2;
   public final static double M2_RATE = 0.1;
   public final static double C_RATE = 0.3;
-  public final static int ITERATIONS = 700;
-  public final static int POPULATION_SIZE = 100;
+  public final static int ITERATIONS = 1000;
+  public final static int POPULATION_SIZE = 40;
 
   private int n;
   private int[][] coordinates;
@@ -91,7 +91,7 @@ public class MTSPInstance {
   }
 
   public static void main(String[] args){
-      MTSPInstance instance = new MTSPInstance(1, 7);
+      MTSPInstance instance = new MTSPInstance(0, 3);
       instance.executeAlgorithm(instance);
   }
 }

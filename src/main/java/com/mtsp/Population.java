@@ -49,6 +49,7 @@ public class Population {
       newS.setInstance(s.getInstance());
       int[] chromosome = Arrays.copyOf(s.getChromosome(), s.getChromosome().length);
       newS.setChromosome(chromosome);
+      newS.setLongestTour(newS.computeLongestTour());
     }
     this.population = population;
   }
@@ -67,6 +68,7 @@ public class Population {
       Solution s = new Solution();
       s.setInstance(instance);
       s.generateSolution();
+      s.setLongestTour(s.computeLongestTour());
       population.add(s);
     }
   }
@@ -207,31 +209,31 @@ public class Population {
     List<Solution> p = new ArrayList<Solution>();
     double[] fitnessValues = computeFitnessValues(population);
     double[] prob = new double[populationSize];
-    double[] cummulateProb = new double[populationSize + 1];
+    double[] cummulateProb = new double[populationSize];
     double totalFitness = 0;
     for (int i = 0; i < populationSize; i++) {
       totalFitness += fitnessValues[i];
     }
     for (int i = 0; i < populationSize; i++) {
       prob[i] = fitnessValues[i] / totalFitness;
+      if (i == 0) {
+        cummulateProb[i] = prob[i];
+      } else {
+        cummulateProb[i] = cummulateProb[i - 1] + prob[i];
+      }
     }
-    cummulateProb[0] = 0;
-    for (int i = 1; i < populationSize; i++) {
-      cummulateProb[i] = cummulateProb[i - 1] + prob[i - 1];
-    }
-    cummulateProb[populationSize] = 1;
     double r;
     Random random = new Random();
     for (int i = 0; i < populationSize; i++) {
       p.add(new Solution());
       r = random.nextDouble();
       for (int j = 0; j < populationSize - 1; j++) {
-        if (cummulateProb[j] < r && r < cummulateProb[j + 1]) {
-          p.set(i, population.get(j));
+        if (cummulateProb[j] < r && r <= cummulateProb[j + 1]) {
+          p.set(i, population.get(j + 1));
         }
       }
-      if (r > cummulateProb[populationSize - 1]) {
-        p.set(i, population.get(populationSize - 1));
+      if (r < cummulateProb[0]) {
+        p.set(i, population.get(0));
       }
     }
     setPopulation(p);
