@@ -61,8 +61,8 @@ public class Population {
 				particles[i] = new Particle(computeNext(particles[i]));
 			}
 			count++;
-			printBest(count, fileName);
 		}
+		printBest();
 	}
 
 	public boolean isGBest(Particle sol) {
@@ -93,5 +93,9 @@ public class Population {
 		text += "Best value: " + f.compute(gbest.getPresent());
 		System.out.println(text);
 		fileUtils.updateFile(fileName, text);
+	}
+
+	public void printBest(){
+		System.out.println(f.compute(gbest.getPresent()));
 	}
 }
